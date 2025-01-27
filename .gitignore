@@ -1,0 +1,74 @@
+**/*.iml
+**/.ivy
+**/.classpath
+**/.project
+**/.sass-cache
+**/.settings
+**/bin
+**/build
+**/build_gradle
+**/dist
+**/node_modules
+**/node_modules_cache
+**/test-coverage
+**/tmp
+**/.web_bundle_build
+.gradle
+.idea
+/bundles
+/gradle-*.properties
+/plugins-sdk/**/classes
+/plugins-sdk/**/ivy.xml.MD5
+/plugins-sdk/**/liferay-hook.xml.processed
+/plugins-sdk/build.*.properties
+/plugins-sdk/dependencies/**/*.jar
+/plugins-sdk/dist
+/plugins-sdk/lib
+test-results
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+/.idea/
+/*.iml
+/vscode/
+
+# Build directories
+/build/
+/dist/
+/target/
+/bin/
+/out/
+
+# Node modules and dependencies
+/node_modules/
+/yarn.lock
+package-lock.json
+
+# Liferay-specific auto-generated files
+/osgi/state/
+/osgi/war/
+/work/
+/temp/
+/logs/
+/bundles/
+/liferay.log
+/liferay_home/
+
+# Maven/Gradle files
+/.mvn/
+/.gradle/
+/.gradle-cache/
+/*.class
+*.log
+
+# Compiled files
+*.class
+*.jar
+*.war
+
+# Sensitive configuration files
+portal-ext.properties
+settings-local.properties

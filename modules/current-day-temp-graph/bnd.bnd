@@ -1,0 +1,7 @@
+Bundle-Name: current-day-temp-graph
+Bundle-SymbolicName: current.day.temp.graph
+Bundle-Version: 1.0.0
+Export-Package: current.day.temp.graph.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

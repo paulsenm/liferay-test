@@ -1,0 +1,4 @@
+// Check GETTING_STARTED.markdown for information regarding usage.
+dependencies {
+    compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "7.4.3"
+}

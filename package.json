@@ -1,0 +1,12 @@
+{
+    "dependencies": {
+        "bootstrap": "^5.3.3",
+        "highcharts": "^12.1.2"
+    },
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "modules\\current-day-temp-graph"
+        ]
+    }
+}

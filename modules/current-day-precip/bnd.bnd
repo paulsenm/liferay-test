@@ -1,0 +1,7 @@
+Bundle-Name: current-day-precip
+Bundle-SymbolicName: current.day.precip
+Bundle-Version: 1.0.0
+Export-Package: current.day.precip.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

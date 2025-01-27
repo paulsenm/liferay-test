@@ -1,0 +1,14 @@
+{
+  "name": "current-day-temp-graph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "highcharts": "^12.1.2",
+    "liferay-module-config-generator": "1.3.3"
+  }
+}
