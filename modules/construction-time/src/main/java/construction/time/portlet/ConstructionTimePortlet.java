@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -39,62 +40,41 @@ public class ConstructionTimePortlet extends MVCPortlet {
     @Override
     public void doView(RenderRequest renderRequest, RenderResponse renderResponse) 
             throws PortletException, java.io.IOException {
-        Map<String, Integer> monthlyDataMarionCo = new HashMap<>();
-        Map<String, Integer> monthlyDataDeschutesCo = new HashMap<>();
+    	String[] jurisTitles = {"DESCHUTES_CO", "MARION_CO", "LINCOLN_CO", "MILWAUKIE", "REDMOND", "SPRINGFIELD"};
 
-        // Connect to the database
-        Connection connection;
-
-        try {
-        	connection = DataAccess.getConnection();
-            // Query to aggregate construction permits by month
-            String sqlMarionCo = "SELECT MONTH(start_date) AS month, COUNT(*) AS frequency " +
-                         "FROM permits_marion_co " +
-                         "GROUP BY MONTH(start_date)" +
-                         "ORDER BY MONTH(start_date);";
-            
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlMarionCo);
-            ResultSet resultSetMarionCo = preparedStatement.executeQuery();
-
-            // Populate the map with data
-            while (resultSetMarionCo.next()) {
-                String month = resultSetMarionCo.getString("month");
-                int frequency = resultSetMarionCo.getInt("frequency");
-                System.out.println("_________Frequency for month: " + month + "was: " + String.valueOf(frequency));
-                monthlyDataMarionCo.put(month, frequency);
+        Map<String, Map<String, Integer>> allJurisData = new HashMap<>();
+        // Query to aggregate construction permits by month
+        String sqlVariableJuris = "SELECT MONTH(start_date) AS month, COUNT(*) AS frequency " +
+                     "FROM permits_all_juris " +
+                     "WHERE  permit_jurisdiction = ? " + 
+                     "GROUP BY MONTH(start_date)" +
+                     "ORDER BY MONTH(start_date);";
+        
+        try (Connection connection = DataAccess.getConnection();){
+            for (String jurisTitle : jurisTitles) {
+            	Map<String, Integer> monthlyData = new HashMap<>();
+            	
+            	try (PreparedStatement preparedStatement = connection.prepareStatement(sqlVariableJuris)) {
+            		preparedStatement.setString(1, jurisTitle);
+                    try (ResultSet resultSet = preparedStatement.executeQuery()){
+                    	while (resultSet.next()) {
+                    		String month = resultSet.getString("month");
+                    		int frequency = resultSet.getInt("frequency");
+                    		monthlyData.put(month,  frequency);
+                    	}
+                    }
+            	}
+            	allJurisData.put(jurisTitle, monthlyData);
             }
-
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-        	connection = DataAccess.getConnection();
-            // Query to aggregate construction permits by month
-            String sqlDeschutesCo = "SELECT MONTH(start_date) AS month, COUNT(*) AS frequency " +
-                         "FROM permits_deschutes_co " +
-                         "GROUP BY MONTH(start_date)" +
-                         "ORDER BY MONTH(start_date);";
-            
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlDeschutesCo);
-            ResultSet resultSetDeschutesCo = preparedStatement.executeQuery();
-
-            // Populate the map with data
-            while (resultSetDeschutesCo.next()) {
-                String month = resultSetDeschutesCo.getString("month");
-                int frequency = resultSetDeschutesCo.getInt("frequency");
-                System.out.println("_________Frequency for month: " + month + "was: " + String.valueOf(frequency));
-                monthlyDataDeschutesCo.put(month, frequency);
-            }
-
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+       
 
         // Pass the data to the JSP
-        renderRequest.setAttribute("monthlyDataMarionCo", monthlyDataMarionCo);
-        renderRequest.setAttribute("monthlyDataDeschutesCo", monthlyDataDeschutesCo);
+        renderRequest.setAttribute("allJurisData", allJurisData);
         super.doView(renderRequest, renderResponse);
     }
 }
