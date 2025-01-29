@@ -4,9 +4,10 @@
 
 <!-- Load jQuery and Highcharts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="<%= renderRequest.getContextPath() %>/js/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
 
 <script>
+	let tempHourlyChart;
     function initializeHC(tempDataHourly) {
         // Check if Highcharts is loaded
         if (typeof Highcharts === 'undefined') {
@@ -16,8 +17,11 @@
 
         console.log('Initializing Highcharts...');
 
+        if(tempHourlyChart){
+        	tempHourlyChart.destroy();
+        }
         // Highcharts configuration
-        Highcharts.chart('chart-container', {
+        tempHourlyChart = Highcharts.chart('chart-container-temp-hourly', {
             chart: {
                 type: 'area'
             },
@@ -39,7 +43,7 @@
             },
             series: [
                 {
-                    name: 'Portland', // Example name
+                    name: 'Portland',
                     //data: [1, 2, 3, 4, 5, 6, 7]
                 	data: tempDataHourly
                 }
@@ -72,7 +76,7 @@
         <p><strong>Error:</strong> <%= error %></p>
     <% } else { %>
         <!-- Highcharts Container -->
-        <div id="chart-container" style="width: 100%; height: 400px;"></div>
+        <div id="chart-container-temp-hourly" style="width: 100%; height: 400px;"></div>
         
         <!-- Display Weather Details -->
         <h2>Current Weather</h2>
@@ -80,10 +84,11 @@
         <p><strong>Condition:</strong> <%= condition != null ? condition : "N/A" %></p>
      <% } %>
   <script>
-  	window.onload = function(){
-  		initializeHC(<%= tempListInt != null ? tempListInt.toString() : "[]" %>);
-  		console.log("temp list int was: ", <%= tempListInt %>);
-  		}
+  document.addEventListener('DOMContentLoaded', function () {
+      const tempDataHourly = <%= tempListInt != null ? tempListInt.toString() : "[]" %>;
+      console.log('Temperature data: ', tempDataHourly);
+      initializeHC(tempDataHourly);
+  });
 </script>
 </div>
 
